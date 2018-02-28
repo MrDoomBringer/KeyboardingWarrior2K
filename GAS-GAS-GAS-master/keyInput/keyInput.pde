@@ -1,9 +1,10 @@
 int rectWidth;
 int checker;
-String[] words = {"the", "quick", "brown", "fox"};
+ArrayList<word> words = new wordGroup("a the quick brown fox a").getWordGroup();
 String currentWord;
 PFont myFont;
 int fontSize;
+int cursorIndex;
 
 void setup() {
   size(640, 360);
@@ -12,18 +13,28 @@ void setup() {
   rectWidth = width/4;
   checker = 0;
   fontSize = 32;
-    
+  cursorIndex = 0;
 
-  myFont = createFont("Georgia", fontSize);
+  myFont = createFont("Consolas", fontSize);
   textFont(myFont);
 }
 
 void draw() { 
   background(0);
-  int num = 0;
-  for (int i = 0; i < words.length; i++){
-    text(words[i],num,50);
-    num += words[i].length()*22;
+  int shift = 0;
+  int counter = 0;
+  int correctPosition = 0;
+  for (int i = 0; i < words.size(); i++){
+    for (int j = 0; j < words.get(i).getLetters().size(); j++){
+      if (counter == cursorIndex)
+        fill(255,0,0);
+      else
+        fill(255);
+      text(words.get(i).charAt(j),shift,50);
+      shift += fontSize/2;
+      counter ++;
+    }
+    shift += fontSize/2;
   }
   
 }
@@ -44,8 +55,10 @@ void keyPressed() {
   }
   if (key == BACKSPACE){
   tryWord = tryWord.substring(0,tryWord.length()-1);
-  wordGroup wordGroup = new wordGroup("a the    quick brown fox a");
+  wordGroup wordGroup = new wordGroup("a the quick brown fox a");
   System.out.print(wordGroup.getWordGroup());
   }
-  
+  if (key == ' '){
+    cursorIndex++;
+  }
 }
