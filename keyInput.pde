@@ -35,5 +35,10 @@ void keyPressed() {
   } else if (key >= 'a' && key <= 'z') {
     keyIndex = key - 'a';
   }
+  if (keyIndex != -1){
+    if (currentWord.tryLetter(key))
+      tryWord += key;
+  }
+  if (key == BACKS
   
 }
