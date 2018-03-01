@@ -1,6 +1,7 @@
 class word{//class exists to add more functionality to words
  String word;
  ArrayList<Character> letters;
+ ArrayList<
  public word(String word)
  {
    letters = new ArrayList<Character>();
@@ -8,9 +9,9 @@ class word{//class exists to add more functionality to words
      letters.add(word.charAt(i));
  }
   
-  public boolean tryLetter(char letter, int index)
+  public boolean tryType(char letter, int index)
   {
-     return (word.charAt(index) == letter);
+     return (letters.get(index) == letter);
   }
   
   public ArrayList<Character> getLetters()
