@@ -16,8 +16,6 @@ void draw() {
 
 void keyPressed() {
   int num = minigames.get(currentGame).tryType(key);
-    if (num == 1)
-      System.out.println("correct");
     if (num == 2)
       minigames.set(0, new typingTest(50,150,32));
   

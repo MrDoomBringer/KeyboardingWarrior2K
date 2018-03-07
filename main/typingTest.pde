@@ -1,21 +1,25 @@
 import java.util.Random;
 class typingTest extends minigame{
-  
+  String mainPhrase;
   String currentPhrase;
   int[] correctList;
   int currentWord;
   int currentIndex;
   int shift;
   int counter;
+  int lineLength;
   String[] phrases = new String[0];
+  boolean newLine = false;
 
 //list of all possible phrases
   public typingTest(int x, int y, int fontSize){
     super(x,y,fontSize);
     initPhrases();
-    currentPhrase = phrases[rand.nextInt(phrases.length)];
-    correctList = new int[currentPhrase.length()];
+    mainPhrase = phrases[rand.nextInt(phrases.length)];
     currentIndex = 0;
+    currentPhrase = mainPhrase;//.substring(currentIndex,min(currentIndex+200,mainPhrase.length()));
+    correctList = new int[currentPhrase.length()];
+    lineLength = 30;
   }
   
   public int tryType(char letter){
@@ -33,10 +37,10 @@ class typingTest extends minigame{
   public void outputText()
   {
     shift = 0;
-    cX(rand.nextInt(3)-1);
-    cY(rand.nextInt(3)-1);
+   // cX(rand.nextInt(3)-1);
+    //cY(rand.nextInt(3)-1);
     int downShift = 0;
-    int oldIndex = currentIndex;
+    
   for (int i = 0; i < currentPhrase.length(); i++){
       if (correctList[i] == 1)
         fill(0,255,0);
@@ -46,17 +50,28 @@ class typingTest extends minigame{
         fill(255);
       text(currentPhrase.charAt(i),x+shift,y+downShift);
       shift += fontSize/2;
-      if (i % 30 == 29){
+      if (i > 0 && i % lineLength == 0){
       shift = 0;
-      downShift += 32;
+      downShift += fontSize;
       }
-      
-      if (currentIndex % 30 == 29)
+      if(currentIndex == lineLength*2-1)
       {
-      y -= 16;
-      oldIndex = currentIndex;
+        newLine = true;
       }
       
+      if (newLine && currentIndex == lineLength*2){
+      currentPhrase = currentPhrase.substring(30,currentPhrase.length());
+      currentIndex = lineLength;
+      for (int j=0; j<correctList.length;j++)
+      {
+       if (j < lineLength && j+lineLength < correctList.length)
+         correctList[j] = correctList[j+lineLength];
+       else
+         correctList[j] = 0;
+      }
+      
+      newLine = false;
+      }
     }
     
     
