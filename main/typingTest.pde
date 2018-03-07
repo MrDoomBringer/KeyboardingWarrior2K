@@ -23,6 +23,7 @@ class typingTest extends minigame{
   }
   
   public int tryType(char letter){
+
     if ((currentPhrase.charAt(currentIndex) == letter) || letter == ';' )
     {
     correctList[currentIndex] = 1;
