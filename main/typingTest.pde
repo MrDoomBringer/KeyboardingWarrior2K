@@ -19,19 +19,38 @@ class typingTest extends minigame{
     currentIndex = 0;
     currentPhrase = mainPhrase;//.substring(currentIndex,min(currentIndex+200,mainPhrase.length()));
     correctList = new int[currentPhrase.length()];
-    lineLength = 30;
+    lineLength = 15;
   }
   
-  public int tryType(char letter){
-    if ((currentPhrase.charAt(currentIndex) == letter) || letter == ';' )
+  public int tryType(char letter, int code){
+    if (code == SHIFT)
     {
-    correctList[currentIndex] = 1;
-    currentIndex++;
-    if (currentIndex == currentPhrase.length()) 
-      return 2;
-    return 1;
+      return 3;
+      
     }
-    return 0;
+    else if (letter == BACKSPACE)
+    {
+        if (currentIndex > 0)
+         currentIndex--;
+       correctList[currentIndex] = 0;
+       return 3; 
+    }
+    else if ((currentPhrase.charAt(currentIndex) == letter) || letter == ';' )
+    {
+      correctList[currentIndex] = 1;
+      currentIndex++;
+      if (currentIndex == currentPhrase.length()) 
+        return 2;
+      return 1;
+    }
+    else
+    {
+      correctList[currentIndex] = -1;
+      currentIndex++;
+      if (currentIndex == currentPhrase.length()) 
+        return 2;
+      return 0;
+    }
    
   }
   public void outputText()
@@ -40,7 +59,6 @@ class typingTest extends minigame{
    // cX(rand.nextInt(3)-1);
     //cY(rand.nextInt(3)-1);
     int downShift = 0;
-    
   for (int i = 0; i < currentPhrase.length(); i++){
       if (correctList[i] == 1)
         fill(0,255,0);
@@ -50,17 +68,21 @@ class typingTest extends minigame{
         fill(255);
       text(currentPhrase.charAt(i),x+shift,y+downShift);
       shift += fontSize/2;
-      if (i > 0 && i % lineLength == 0){
-      shift = 0;
-      downShift += fontSize;
+
+      if (i > 0 && i % lineLength == 0)
+      {
+        shift = 0;
+        downShift += fontSize;
       }
+      
+      
       if(currentIndex == lineLength*2-1)
       {
         newLine = true;
       }
       
       if (newLine && currentIndex == lineLength*2){
-      currentPhrase = currentPhrase.substring(30,currentPhrase.length());
+      currentPhrase = currentPhrase.substring(lineLength,currentPhrase.length());
       currentIndex = lineLength;
       for (int j=0; j<correctList.length;j++)
       {
