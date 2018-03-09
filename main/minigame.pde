@@ -13,7 +13,7 @@ class minigame extends movable
  }
  public void outputText(){}
  
- public int tryType(char letter){ return 0; }
+ public int tryType(char letter, int code){ return 0; }
  
   
 }
