@@ -19,7 +19,7 @@ class typingTest extends minigame{
     currentIndex = 0;
     currentPhrase = mainPhrase;//.substring(currentIndex,min(currentIndex+200,mainPhrase.length()));
     correctList = new int[currentPhrase.length()];
-    lineLength = 15;
+    lineLength = 30;
   }
   
   public int tryType(char letter, int code){
