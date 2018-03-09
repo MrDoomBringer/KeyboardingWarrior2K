@@ -10,6 +10,7 @@ class typingTest extends minigame{
   int lineLength;
   String[] phrases = new String[0];
   boolean newLine = false;
+  int spaceLine = -1;
 
 //list of all possible phrases
   public typingTest(int x, int y, int fontSize){
@@ -19,7 +20,7 @@ class typingTest extends minigame{
     currentIndex = 0;
     currentPhrase = mainPhrase;//.substring(currentIndex,min(currentIndex+200,mainPhrase.length()));
     correctList = new int[currentPhrase.length()];
-    lineLength = 15;
+    lineLength = 30;
   }
   
   public int tryType(char letter, int code){
@@ -68,8 +69,17 @@ class typingTest extends minigame{
         fill(255);
       text(currentPhrase.charAt(i),x+shift,y+downShift);
       shift += fontSize/2;
-
-      if (i > 0 && i % lineLength == 0)
+      
+      int k = i;
+      while (k % lineLength != 0 && k < currentPhrase.length()-1)
+      {
+        k++;
+        if (currentPhrase.charAt(k)==' ' && spaceLine + lineLength < currentPhrase.length())
+          spaceLine = k;
+      }
+        
+        
+      if (i == spaceLine)
       {
         shift = 0;
         downShift += fontSize;
