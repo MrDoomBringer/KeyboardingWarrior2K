@@ -1,128 +1,69 @@
-import java.util.Random;
-class typingTest extends minigame{
-  String mainPhrase;
-  String currentPhrase;
+class typingTest2 extends minigame{
+  String[] words = {"hey ","fam ","hey2 ","fam2 ","hey3 ","fam3 "};
+  String currentWord;
+  int index;
   int[] correctList;
-  int currentWord;
-  int currentIndex;
-  int shift;
-  int counter;
-  int lineLength;
-  String[] phrases = new String[0];
-  boolean newLine = false;
-  int spaceLine = -1;
-
-//list of all possible phrases
-  public typingTest(int x, int y, int fontSize){
+  public typingTest2(int x, int y, int fontSize){
     super(x,y,fontSize);
     initPhrases();
-    mainPhrase = phrases[rand.nextInt(phrases.length)];
-    currentIndex = 0;
-    currentPhrase = mainPhrase;//.substring(currentIndex,min(currentIndex+200,mainPhrase.length()));
-    correctList = new int[currentPhrase.length()];
-    correctList[0] = 2;
-    lineLength = 30;
-    
+    index = 0;
+    currentWord = "";
+    correctList = new int[words.length];
   }
   
   public int tryType(char letter, int code){
-    if (code == SHIFT)
+    if (code == SHIFT) return 0;
+    else if (code == BACKSPACE)
     {
-      return 3;
-      
-    }
-    else if (letter == BACKSPACE)
-    {
-       
-        if (currentIndex > 0)
-        {
-        correctList[currentIndex] = 0;
-        currentIndex--;
-        correctList[currentIndex] = 2;
-        
-        }
-       
-       return 3; 
-    }
-    else if ((currentPhrase.charAt(currentIndex) == letter) || letter == ';' )
-    {
-      correctList[currentIndex] = 1;
-      currentIndex++;
-      if (currentIndex == currentPhrase.length()) 
-        return 2;
-      correctList[currentIndex] = 2;
-      return 1;
-    }
-    else
-    {
-      correctList[currentIndex] = -1;
-      currentIndex++;
-      if (currentIndex == currentPhrase.length()) 
-        return 2;
-      correctList[currentIndex] = 2;
+      currentWord = currentWord.substring(0,currentWord.length()+1);  
       return 0;
     }
-   
-  }
-  public void outputText()
-  {
-    shift = 0;
-   // cX(rand.nextInt(3)-1);
-    //cY(rand.nextInt(3)-1);
-    int downShift = 0;
-  for (int i = 0; i < currentPhrase.length(); i++){
-      if (correctList[i] == 2)
-        text("_",x+shift,y+downShift);
-      if (correctList[i] == 1)
-        fill(0,255,0);
-      else if (correctList[i] == -1)
-        fill(255,0,0);
+    else
+    if (letter == ' '){
+      if (currentWord.equals(words[index])){
+        correctList[index] = 1; 
+        currentWord = "";
+              index ++;
+        return 1;
+      }
       else
-        fill(255);
-      text(currentPhrase.charAt(i),x+shift,y+downShift);
-      shift += fontSize/2;
-      
-      int k = i;
-      while (k % lineLength != 0 && k < currentPhrase.length()-1)
-      {
-        k++;
-        if (currentPhrase.charAt(k)==' ' && i + lineLength < currentPhrase.length())
-          spaceLine = k;
-      }
-        
-        
-      if (i == spaceLine)
-      {
-        shift = 0;
-        downShift += fontSize;
-      }
-      
-      
-      if(currentIndex == lineLength*2-1)
-      {
-        newLine = true;
-      }
-      
-      if (newLine && currentIndex == lineLength*2){
-      currentPhrase = currentPhrase.substring(lineLength,currentPhrase.length());
-      currentIndex = lineLength;
-      for (int j=0; j<correctList.length;j++)
-      {
-       if (j < lineLength && j+lineLength < correctList.length)
-         correctList[j] = correctList[j+lineLength];
-       else
-         correctList[j] = 0;
-      }
-      
-      newLine = false;
-      }
-      
+        correctList[index] = -1;
+        currentWord = "";
+              index ++;
+        return -1;
     }
+    if (currentWord.length() == words[index].length())
+      return -1;
+      
+    currentWord += Character.toString(letter);
+    String testWord = words[index].substring(0,currentWord.length());
+    System.out.println("word="+currentWord+" and words[index]="+words[index]+" and testWord="+testWord);
+    if (!currentWord.equals(testWord))
+      correctList[index] = 0;
     
-    
+    return -1;
   }
   
-  public void initPhrases()
+    public void outputText()
+  {
+    int downShift = 0;
+    int shift = 0;
+    for (int i = 0; i < words.length;i++)
+    {
+      
+      downShift += (i % 5==0 ? fontSize : 0);
+      if (i % 5 == 0) shift = 0;
+        
+      if (correctList[i] == 1) fill(0,255,0);
+      else if (correctList[i] == -1) fill(255,0,0);
+      else fill(255);
+      text(words[i],x+shift,y+downShift);
+      shift += (words[i].length()*(fontSize/2));
+
+    
+    }
+  }
+    public void initPhrases()
   {
    String[] temp = {
   "The FitnessGram Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly but gets faster each minute after you hear this signal. beep A single lap should be completed each time you hear this sound. ding Remember to run in a straight line and run as long as possible. The second time you fail to complete a lap before the sound your test is over. The test will begin on the word start. On your mark get ready start.", 
@@ -149,9 +90,25 @@ class typingTest extends minigame{
   "Ms kolly is the greatest", 
   "Miss me with that gay stuff"
   };
-  String[] test = {"a a a a a a a a a a a a a a a a a a a a a a a a a "};
-  phrases = temp;
- 
+  /*
+  //String[] test = {"a a a a a a a a a a a a a a a a a a a a a a a a a "};
+  
+  String phrase = temp[rand.nextInt(temp.length)];
+  words = new String[phrase.length()];
+  String word = "";
+  int b = 0;
+  for (int i = 0; i < phrase.length(); i++)
+  {
+    word += phrase.charAt(i);
+   if (phrase.charAt(i) == ' ')
+   {
+     b++;
+     words[b] = word;
+     word = "";
+   }
+   
+  }*/
+     
   }
 }
   
