@@ -10,6 +10,7 @@ class typingTest extends minigame{
   int lineLength;
   String[] phrases = new String[0];
   boolean newLine = false;
+  int spaceLine = -1;
 
 //list of all possible phrases
   public typingTest(int x, int y, int fontSize){
@@ -19,7 +20,9 @@ class typingTest extends minigame{
     currentIndex = 0;
     currentPhrase = mainPhrase;//.substring(currentIndex,min(currentIndex+200,mainPhrase.length()));
     correctList = new int[currentPhrase.length()];
+    correctList[0] = 2;
     lineLength = 30;
+    
   }
   
   public int tryType(char letter, int code){
@@ -30,9 +33,15 @@ class typingTest extends minigame{
     }
     else if (letter == BACKSPACE)
     {
+       
         if (currentIndex > 0)
-         currentIndex--;
-       correctList[currentIndex] = 0;
+        {
+        correctList[currentIndex] = 0;
+        currentIndex--;
+        correctList[currentIndex] = 2;
+        
+        }
+       
        return 3; 
     }
     else if ((currentPhrase.charAt(currentIndex) == letter) || letter == ';' )
@@ -41,6 +50,7 @@ class typingTest extends minigame{
       currentIndex++;
       if (currentIndex == currentPhrase.length()) 
         return 2;
+      correctList[currentIndex] = 2;
       return 1;
     }
     else
@@ -49,6 +59,7 @@ class typingTest extends minigame{
       currentIndex++;
       if (currentIndex == currentPhrase.length()) 
         return 2;
+      correctList[currentIndex] = 2;
       return 0;
     }
    
@@ -60,6 +71,8 @@ class typingTest extends minigame{
     //cY(rand.nextInt(3)-1);
     int downShift = 0;
   for (int i = 0; i < currentPhrase.length(); i++){
+      if (correctList[i] == 2)
+        text("_",x+shift,y+downShift);
       if (correctList[i] == 1)
         fill(0,255,0);
       else if (correctList[i] == -1)
@@ -68,8 +81,17 @@ class typingTest extends minigame{
         fill(255);
       text(currentPhrase.charAt(i),x+shift,y+downShift);
       shift += fontSize/2;
-
-      if (i > 0 && i % lineLength == 0)
+      
+      int k = i;
+      while (k % lineLength != 0 && k < currentPhrase.length()-1)
+      {
+        k++;
+        if (currentPhrase.charAt(k)==' ' && i + lineLength < currentPhrase.length())
+          spaceLine = k;
+      }
+        
+        
+      if (i == spaceLine)
       {
         shift = 0;
         downShift += fontSize;
@@ -94,6 +116,7 @@ class typingTest extends minigame{
       
       newLine = false;
       }
+      
     }
     
     
@@ -126,6 +149,7 @@ class typingTest extends minigame{
   "Ms kolly is the greatest", 
   "Miss me with that gay stuff"
   };
+  String[] test = {"a a a a a a a a a a a a a a a a a a a a a a a a a "};
   phrases = temp;
  
   }
