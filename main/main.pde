@@ -24,6 +24,7 @@ void draw() {
    minigames.get(currentGame).outputText();
   time += 1/3600.0;
   pm.checkP();
+
 }
 
 void keyPressed() {
