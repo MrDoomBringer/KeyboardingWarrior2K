@@ -1,33 +1,4 @@
-PrintWriter output;
-
-class particleManager{
-  int time;
-  ArrayList<particle> pList = new ArrayList<particle>();
-  public particleManager(){
-   time = 0;
-  output = createWriter("particles.txt");
-  }
-  public void test(){
-    time = millis();
-    println(time);
-    }
-  public void checkP(){
-    for (int i = pList.size()-1; i >=0; i--){
-      if (pList.get(i).show())
-        pList.remove(i);
-      
-    }
-  }
-  public void stopWriter(){
-  output.flush(); 
-  output.close(); 
-  exit();
-  }
-    public void addP(int x, int y, int num, String name){
-    //pList.add(new particle(x,y,num, name));
-    //output.println("pList.add(new particle("+x+","+y+","+num+",\""+name+"\"));");
-    
-  pList.add(new particle(575,148,4351,"star"));
+pList.add(new particle(575,148,4351,"star"));
 pList.add(new particle(217,106,5754,"star"));
 pList.add(new particle(521,256,6595,"star"));
 pList.add(new particle(80,221,7347,"star"));
@@ -55,8 +26,8 @@ pList.add(new particle(345,47,8146,"oh"));
 pList.add(new particle(134,40,8850,"oh"));
 pList.add(new particle(251,42,9085,"oh"));
 pList.add(new particle(460,42,9398,"oh"));
-//pList.add(new particle(530,62,10489,"oh"));
-pList.add(new particle(531,62,13596,"oh"));
+pList.add(new particle(530,62,10489,"oh"));
+
 pList.add(new particle(416,65,13956,"oh"));
 pList.add(new particle(215,50,14386,"oh"));
 pList.add(new particle(282,53,15032,"oh"));
@@ -80,7 +51,3 @@ pList.add(new particle(362,81,24845,"oh"));
 pList.add(new particle(442,84,25222,"oh"));
 pList.add(new particle(549,95,25619,"oh"));
 
-
-
-}
- }

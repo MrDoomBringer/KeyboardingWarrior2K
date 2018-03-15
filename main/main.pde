@@ -1,10 +1,14 @@
-import processing.sound.*;
-SoundFile file;
+import ddf.minim.*;
+
+Minim minim;
+AudioPlayer music;
+
 ArrayList<minigame> minigames;
 particleManager pm;
 int currentGame;
 double time = 0;
 double words = 0;
+PImage img;
 
 void setup() {
   size(640, 360);
@@ -13,10 +17,15 @@ void setup() {
   currentGame = 0;
   minigames = new ArrayList<minigame>();
   minigames.add(new typingTest2(50,150,32)); 
-  //Load a soundfile from the /data folder of the sketch and play it back
-    file = new SoundFile(this, "D:/SS13/kolly/GAS-GAS-GAS/main/NIGHT OF FIRE.mp3");
-  file.play();
+  //Load a soundfile  from the /data folder of the sketch and play it back
+  //  file = new SoundFile(this, "D:/SS13/kolly/GAS-GAS-GAS/main/NIGHT OF FIRE.mp3");
+ // file.play();
+ minim = new Minim(this);
+ music = minim.loadFile("NIGHT OF FIRE.mp3");
+ music.play();
+ 
   pm = new particleManager();
+  
 }
 
 void draw() { 

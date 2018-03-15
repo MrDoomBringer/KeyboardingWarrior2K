@@ -18,6 +18,8 @@ public particle(int x,int y, int time, String name){
 public boolean show(){
  if  (time <= millis()){
    counter ++;
+//rotate(counter);
+   //scale(0.9);
     tint(255,tinter);
    image(img, x-counter,y-counter);
   
