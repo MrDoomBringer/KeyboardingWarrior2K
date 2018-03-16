@@ -4,15 +4,16 @@ class minigame extends movable
   int fontSize;
 
   public minigame(int x, int y, int fontSize)
- {
-   super (x,y);
-   this.fontSize = fontSize;
-   font = createFont("Consolas", fontSize);
-   textFont(font);
- }
- public void outputText(){}
- 
- public int tryType(char letter, int code){ return 0; }
- 
-  
+  {
+    super (x, y);
+    this.fontSize = fontSize;
+    font = createFont("Consolas", fontSize);
+    textFont(font);
+  }
+  public void outputText() {
+  }
+
+  public int tryType(char letter, int code) { 
+    return 0;
+  }
 }
