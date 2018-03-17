@@ -5,6 +5,36 @@ class imageHandler {
   PImage bgIntro;
   int bg;
   int fade;
+  int counter;
+  int[] times ={ 
+    28276, 
+    28476, 
+    28676, 
+    30162, //
+    31625, //
+    33227, //
+    34876, //
+    34876, 
+    35201, 
+    35619, 
+    35990, 
+    36362, //
+    36710, 
+    37151, 
+    37523, 
+    37871, //
+    38266, 
+    38684, 
+    39032, 
+    39450, //
+    39775, 
+    40054, 
+    40333, 
+    40611, 
+    40820, 
+  };
+
+
   public particleManager pm;
   public imageHandler() {
     fade = 255;
@@ -13,7 +43,7 @@ class imageHandler {
     bgMenu = loadImage("menu.png");
     bgIntro = loadImage("intro.png");
     bg = 1;
-
+    counter = 0;
     pm = new particleManager();
     pm.addP(0, 0, 0, "");
   }
@@ -23,49 +53,13 @@ class imageHandler {
 
     if (stage == MENU)
       background(bgMenu);
-    else if (stage == INTRO) {
-      if (time <= 28600)
-        background(bgIntro);
-      else if (time <= 28630)
-        background(loadImage("roadScene1.png"));
-      else if (time <= 28630)
-        background(loadImage("roadScene2.png"));
-      else if (time <= 30139)
-        background(loadImage("roadScene3.png"));
-      else if (time <= 31555)
-        background(loadImage("roadScene4.png"));
-      else if (time <= 33158)
-        background(loadImage("roadScene5.png"));
-      else if (time <= 34783)//
-        background(loadImage("roadScene6.png"));
-      else if (time <= 35572)//
-        background(loadImage("roadScene7.png"));
-      else if (time <= 36362)
-        background(loadImage("roadScene8.png"));
-      else if (time <= 37151)
-        background(loadImage("roadScene9.png"));
-      else if (time <= 37941)//
-        background(loadImage("roadScene10.png"));
-      else if (time <= 38707)//
-        background(loadImage("roadScene11.png"));
-      else if (time <= 39473)
-        background(loadImage("roadScene12.png"));
-      else if (time <= 39586)
-        background(loadImage("roadScene13.png"));
-      else if (time <= 39700)//
-        background(loadImage("roadScene14.png"));
-      else if (time <= 39800)//
-        background(loadImage("roadScene15.png"));
-      else if (time <= 39900)
-        background(loadImage("roadScene16.png"));
-      else if (time <= 40000)
-        background(loadImage("roadScene17.png"));
-      else if (time <= 40600)//
-        background(bgimg);
-      else
-        background(0);
+    else if (stage == INTRO) 
+    {
 
-
+      if (times[counter]<=time && counter < times.length) {
+        background(loadImage("i"+int(counter+1)+"-01.jpg"));
+        counter++;
+      }
       pm.checkP(time);
     } else {
       if (bg == 1) {
@@ -80,7 +74,7 @@ class imageHandler {
     if (stage == MENU && fade > 0) {
       fill(0, fade);
       rect(0, 0, width, height);
-      fade--;
+      fade-=2;
     }
   }
 }

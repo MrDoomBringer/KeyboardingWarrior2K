@@ -7,6 +7,30 @@
 36362
 37941
 39473
+//////////////
+28676
+30162
+31625
+33227
+ - 34876
+34876
+35201
+35619
+35990
+ - 36362
+36710
+37151
+37523
+ - 37871
+38266
+38684
+39032
+ - 39450
+39775
+40054
+40333
+40611
+40820
 */
 public static final int MENU = 0;
 public static final int INTRO = 1;
@@ -45,7 +69,7 @@ void setup() {
 void draw() { 
     imgHandler.update(music.position(), stage);
   if (fade < 255) {
-    fade++;
+    fade+=2;
     music.setGain(music.getGain()-1);
     if (fade >=255) {
       stage = INTRO;
@@ -75,6 +99,8 @@ void keyPressed() {
   //pm.stopWriter();
   if (stage == MENU && keyCode == ENTER) 
     fade = 0;
+  if (stage == INTRO && keyCode == ENTER) 
+    music.cue(5);
   else {
     if (keyCode == CONTROL)
       music.cue(40000);
@@ -87,9 +113,11 @@ void keyPressed() {
   }
 }
 void mousePressed() {
-  System.out.println(music.position());
-  /*if (mouseButton == LEFT)
-   imgHandler.pm.addP(mouseX, mouseY, music.position(), "star");
+  
+  if (mouseButton == LEFT)
+   System.out.println(music.position());
+   //imgHandler.pm.addP(mouseX, mouseY, music.position(), "star");
    else
-   imgHandler.pm.addP(mouseX, mouseY, music.position(), "oh");*/
+   System.out.println(" - "+music.position());
+  //imgHandler.pm.addP(mouseX, mouseY, music.position(), "oh");*
 }
