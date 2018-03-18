@@ -82,8 +82,13 @@ void draw() {
     fade+=2;
     music.setGain(music.getGain()-1);
     if (fade >=255) {
-      stage = INTRO;
-      music = minim.loadFile("NIGHT OF FIRE.mp3");
+      System.out.println("playing!"+stage+" "+fade);
+      if (stage == MENU) {
+        stage = INTRO;
+        music = minim.loadFile("NIGHT OF FIRE.mp3");
+      } else if (stage == BOSSINTRO) 
+        music = minim.loadFile("GAS GAS GAAAS.wav");
+      
       music.loop();
       music.play();
     }
@@ -98,14 +103,20 @@ void draw() {
     imgHandler.pm.checkP(music.position()); 
   if (stage == MAIN) {
     minigames.get(currentGame).outputText(blueCar);
-
-    if (blueCar.rand.nextInt(100) < 8) direction = -1 * direction;
-
+    if (blueCar.rand.nextInt(100) < 8) 
+      direction = -1 * direction;
     redCar.y-=direction;
     blueCar.output();
     redCar.output();
     blueCar.y+=1;
   }
+  if (stage == MAIN && redCar.health <= 0) {
+    fade = 0;
+    stage = BOSSINTRO;
+  }
+  if (stage == BOSSINTRO && music.position() > 41334) 
+    stage = BOSSMAIN;
+
   time += 1/3600.0;
 }
 
@@ -124,7 +135,7 @@ void keyPressed() {
       blueCar.correct();
       imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "one");
       if (blueCar.correct%5==0 && blueCar.streak>0) {
-        redCar.damage(1);
+        redCar.damage(blueCar.streak);
         imgHandler.pm.addP(redCar.x+120, redCar.y+120, music.position(), "boom 2");
       }
     } else if (num == INCORRECT) {
