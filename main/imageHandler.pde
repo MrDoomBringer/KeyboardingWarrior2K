@@ -60,7 +60,7 @@ class imageHandler {
         background(loadImage("i"+int(counter+1)+"-01.jpg"));
         counter++;
       }
-      pm.checkP();
+      
     } else if (stage == BOSSINTRO2 && music.position() < 19800) {
       if (counter < bossTimes.length && bossTimes[counter]<=music.position()) {
         background(loadImage("spinner"+int(counter+1)+".png"));
@@ -96,7 +96,7 @@ class imageHandler {
         text("STREAK x "+blueCar.streak, 0, height);
       }
     }
-
+    pm.checkP();
 
     if (stage == MENU && fade > 0) {
       fill(0, fade);

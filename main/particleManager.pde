@@ -1,5 +1,4 @@
 PrintWriter output;
-
 class particleManager {
   ArrayList<particle> pList = new ArrayList<particle>();
   public particleManager() {

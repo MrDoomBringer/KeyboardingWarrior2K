@@ -55,7 +55,7 @@ car redCar;
 int direction;
 void setup() {
   surface.setResizable(true);
-  surface.setSize(800,450);
+  surface.setSize(800, 450);
   noStroke();
   imgHandler = new imageHandler();
   stage = 0;
@@ -87,11 +87,11 @@ void draw() {
       if (stage == MENU) {
         stage = INTRO;
         music = minim.loadFile("NIGHT OF FIRE.mp3");
-      } else if (stage == BOSSINTRO1){
+      } else if (stage == BOSSINTRO1) {
         music = minim.loadFile("GAS GAS GAAAS.wav");
         imgHandler.counter = 0;
       }
-      
+
       music.loop();
       music.play();
     }
@@ -102,7 +102,7 @@ void draw() {
   if (stage == INTRO && music.position() > 41334) {
     stage = MAIN;
   }
-  if (stage == INTRO || stage == MAIN)
+  if (stage == INTRO || stage == MAIN || stage == BOSSMAIN2)
     imgHandler.pm.checkP(); 
   if (stage == MAIN) {
     minigames.get(currentGame).outputText(blueCar);
@@ -117,15 +117,15 @@ void draw() {
     fade = 0;
     stage = BOSSINTRO1;
   }
-  
+
   if (stage == BOSSINTRO1 && fade >=255)
     stage = BOSSINTRO2;
 
 
-   
+
   else if (stage == BOSSINTRO2 && music.position() > 18300) {
     stage = BOSSMAIN;
-    surface.setSize(450,800);
+    surface.setSize(450, 800);
     redCar.x = width/2;
     redCar.y = 0;
     blueCar.x = width/2;
@@ -133,9 +133,15 @@ void draw() {
     imgHandler.bgimg = loadImage("longRoad1.png");
     imgHandler.bgimg2 = loadImage("longRoad2.png");
   }
-  
-  if (stage == BOSSMAIN && music.position() >= 25400){
+
+  if (stage == BOSSMAIN && music.position() >= 25400) {
     stage = BOSSMAIN2;
+    minigames.set(0, new wordFall(0, 0, 32));
+  }
+
+  if (stage == BOSSMAIN2){
+    minigames.get(currentGame).outputText(blueCar);
+    println("habbening");
   }
   time += 1/3600.0;
 }
@@ -146,24 +152,21 @@ void keyPressed() {
     fade = 0;
     musicFX.play();
   } 
-  if (key == '1'){ 
+  if (key == '1') { 
     stage = MAIN;
     music.pause();
     music = minim.loadFile("NIGHT OF FIRE.mp3");
     music.cue(41334);
     music.play();
   }
-  if (key== '2'){
-     stage = BOSSINTRO2;
+  if (key== '2') {
+    stage = BOSSINTRO2;
     music.pause();
     music = minim.loadFile("GAS GAS GAAAS.wav");
     music.cue(18400);
     music.play();
-        imgHandler.counter = 0;
-  }  
-  else if (stage == MAIN) {
-    if (keyCode == CONTROL)
-      music.cue(40000);
+    imgHandler.counter = 0;
+  } else if (stage == MAIN || stage == BOSSMAIN2) {
     int num = minigames.get(currentGame).tryType(key, keyCode);
     if (num == CORRECT) {
       blueCar.correct();
