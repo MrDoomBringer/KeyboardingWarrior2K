@@ -1,19 +1,13 @@
 PrintWriter output;
 
 class particleManager {
-  int time;
   ArrayList<particle> pList = new ArrayList<particle>();
   public particleManager() {
-    time = 0;
     output = createWriter("particles.txt");
   }
-  public void test() {
-    time = millis();
-    println(time);
-  }
-  public void checkP(int position) {
+  public void checkP() {
     for (int i = pList.size()-1; i >=0; i--) {
-      if (pList.get(i).show(position))
+      if (pList.get(i).show());
         pList.remove(i);
     }
   }

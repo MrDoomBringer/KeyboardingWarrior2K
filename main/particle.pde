@@ -15,8 +15,8 @@ class particle extends movable {
     this.y -= img.height/2;
   }
 
-  public boolean show(int position) {
-    if  (time <= position) {
+  public boolean show() {
+    if  (time <= music.position()) {
       counter ++;
       tint(255, tinter);
       image(img, x-counter, y-counter);
