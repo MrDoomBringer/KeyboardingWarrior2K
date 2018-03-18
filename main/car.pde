@@ -38,6 +38,8 @@ class car extends movable {
   public void correct(){
     streak++;
     correct++;
+    if (y > 60)
+    y-=50;
   }
   public void incorrect(){
     streak = 0;

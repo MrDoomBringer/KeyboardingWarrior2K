@@ -35,6 +35,8 @@
 public static final int MENU = 0;
 public static final int INTRO = 1;
 public static final int MAIN = 2;
+public static final int BOSSINTRO = 3;
+public static final int BOSSMAIN = 3;
 import ddf.minim.*;
 Minim minim;
 AudioPlayer music;
@@ -98,12 +100,12 @@ void draw() {
     minigames.get(currentGame).outputText(blueCar);
 
     if (blueCar.rand.nextInt(100) < 8) direction = -1 * direction;
-    blueCar.y+=direction;
+
     redCar.y-=direction;
     blueCar.output();
     redCar.output();
+    blueCar.y+=1;
   }
-
   time += 1/3600.0;
 }
 
@@ -128,7 +130,8 @@ void keyPressed() {
     } else if (num == INCORRECT) {
       blueCar.incorrect();
       imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "minusOne");
-    } else if (num == 2||keyCode == RIGHT)
+    } 
+    if (minigames.get(0).next||keyCode == RIGHT)
       minigames.set(0, new typingTest2(50, 150, 32));
     //println((words/5)/time);
   }

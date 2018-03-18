@@ -23,17 +23,13 @@ class typingTest2 extends minigame {
       if (currentWord.length() > 0)
         currentWord = currentWord.substring(0, currentWord.length()-1);  
       return NOEFFECT;
-    } else if (letter == ' ') {
-      int status = currentWord.equals(words[index]) ? CORRECT : INCORRECT;
+    } else if (letter == ' ' || letter == ';') {
+      int status = currentWord.equals(words[index])||letter==';' ? CORRECT : INCORRECT;
       correctList[index] = status;
       currentWord = "";
       index ++;
-      return index < words.length ? status : NEXTPHRASE;
-    } else if (letter == ';') {
-      correctList[index] = CORRECT;
-      currentWord = "";
-      index ++;
-      return index < words.length ? CORRECT : NEXTPHRASE;
+      next = !(index < words.length);
+      return  status;
     }
     currentWord += Character.toString(letter);
     return NOEFFECT;
