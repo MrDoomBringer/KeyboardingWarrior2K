@@ -36,10 +36,12 @@ class typingTest2 extends minigame {
       return index < words.length ? CORRECT : NEXTPHRASE;
     }
     currentWord += Character.toString(letter);
-    return -1;
+    return NOEFFECT;
   }
 
-  public void outputText() {
+  public void outputText(car playerCar) {
+    x = playerCar.x+50;
+    y = playerCar.y;
     int downShift = 0;
     int shift = 0;
     for (int i = start; i < words.length; i++) {

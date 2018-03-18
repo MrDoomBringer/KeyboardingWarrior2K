@@ -23,9 +23,9 @@ class particleManager {
     exit();
   }
   public void addP(int x, int y, int num, String name) {
-    //pList.add(new particle(x,y,num, name));
+    pList.add(new particle(x,y,num, name));
     //output.println("pList.add(new particle("+x+","+y+","+num+",\""+name+"\"));");
-
+/*
     pList.add(new particle(575, 148, 4351, "star"));
     pList.add(new particle(217, 106, 5754, "star"));
     pList.add(new particle(521, 256, 6595, "star"));
@@ -77,6 +77,6 @@ class particleManager {
     pList.add(new particle(266, 55, 24452, "oh"));
     pList.add(new particle(362, 81, 24845, "oh"));
     pList.add(new particle(442, 84, 25222, "oh"));
-    pList.add(new particle(549, 95, 25619, "oh"));
+    pList.add(new particle(549, 95, 25619, "oh"));*/
   }
 }

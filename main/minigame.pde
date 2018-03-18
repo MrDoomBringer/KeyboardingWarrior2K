@@ -10,7 +10,7 @@ class minigame extends movable
     font = createFont("Consolas", fontSize);
     textFont(font);
   }
-  public void outputText() {
+  public void outputText(car playerCar) {
   }
 
   public int tryType(char letter, int code) { 
