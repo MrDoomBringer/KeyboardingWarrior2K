@@ -17,7 +17,7 @@ class typingTest2 extends minigame {
     correctList = new int[words.length];
   }
 
-  public int tryType(char letter, int code) {
+  public int tryType(char letter, int code, car playerCar) {
     if (code == SHIFT) return NOEFFECT;
     else if (code == BACKSPACE) {
       if (currentWord.length() > 0)

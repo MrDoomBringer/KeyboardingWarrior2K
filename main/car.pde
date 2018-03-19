@@ -6,6 +6,8 @@ class car extends movable {
   float health;
   float initialHealth;
   int streak;
+  int laser;
+  fallingWord word;
   public car(int x, int y, boolean npc) {
     super(x, y);  
     correct = 0;
@@ -14,13 +16,14 @@ class car extends movable {
     health = 100.0;
     initialHealth = health;
     streak = 0;
+    laser = 0;
   }
-  public void setOpponent(car opponent){
+  public void setOpponent(car opponent) {
     this.opponent = opponent;
   }
-  public void setHealth(float health, float initialHealth){
-   this.health = health; 
-   this.initialHealth = initialHealth;
+  public void setHealth(float health, float initialHealth) {
+    this.health = health;
+    this.initialHealth = initialHealth;
   }
   public void output() {
     if (npc) {
@@ -32,24 +35,43 @@ class car extends movable {
       text(correct, 0, 32);
       text(incorrect, ((""+correct).length())*32, 32);
     }
-    fill(255,0,0);
-    rect(x,y,20,initialHealth);
-    fill(0,255,0);
-    rect(x,y+100,20,-1*health);
+    fill(255, 0, 0);
+    rect(x, y, 10, initialHealth);
+    fill(0, 255, 0);
+    if (health > 0)
+      rect(x, y+initialHealth, 10, -1*health);
     fill(255);
+
+    if (word != null) {
+      laser++;
+      strokeWeight(10);
+      stroke(255, 0, 0, 255-laser*10);
+      System.out.println(""+x+" "+y+" "+word.x+" "+word.y);
+      line(x, y, word.x, word.y);
+      stroke(255);
+      strokeWeight(0);
+
+      if (laser > 20) {
+        word = null;
+        laser = 0;
+      }
+    }
   }
-  public void damage(int damage){
+  public void damage(int damage) {
     health-= damage;
   }
-  
-  public void correct(){
+
+  public void correct() {
     streak++;
     correct++;
     if (opponent.initialHealth <=100)
       if (y > 60)
         y-=50;
   }
-  public void incorrect(){
+  public void setW(fallingWord w) {
+    word = w;
+  }
+  public void incorrect() {
     streak = 0;
     incorrect++;
   }

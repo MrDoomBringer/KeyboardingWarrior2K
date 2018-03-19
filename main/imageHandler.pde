@@ -1,9 +1,36 @@
 class imageHandler {
   PImage bgimg, bgimg2, bgMenu, bgIntro, enemyCarImg, playerCarImg, fidget1, fidget2, fidget3;
   int bg, fade, counter, bossCounter;
-  int[] introTimes ={ 28476, 28576, 28676, 30162, 31625, 33227, 34876, 34876, 35201, 35619, 35990, 36362, 36710, 37151, 37523, 37871, 38266, 38684, 39032, 39450, 39475, 40054, 40333, 40611, 40820, };
-  int[] bossTimes={580, 3600, 6700, 9800, 11400, 13000, 15000, 16600, 18200, 19800};
-  int[] bossCharge={18200, 23846, 24148, 24520, 24891};
+  int[] introTimes ={
+    3854, 
+    5363, 
+    6176, 
+    6942, 
+    8428, 
+    10031, 
+    11609, 
+    13119, 
+    14698, 
+    15534, 
+    16200, //guess
+    17763, 
+    18529, 
+    18622, 
+    19435, 
+    22407, 
+    23521, 
+    24636, 
+    25495, 
+    27097, 
+    27376, 
+    27678, 
+    27956, 
+    28305, 
+    //28444
+
+    28476, 28576, 28676, 30162, 31625, 33227, 34876, 34876, 35201, 35619, 35990, 36362, 36710, 37151, 37523, 37871, 38266, 38684, 39032, 39450, 39475, 40054, 40333, 40611, 40820, };
+  int[] bossTimes={580, 3600, 6700, 9800, 11400, 13000, 15000, 16600};
+  int[] bossCharge={ 18000, 23846, 24148, 24520, 24891};
 
   public particleManager pm;
   public imageHandler() {
@@ -31,12 +58,23 @@ class imageHandler {
       background(bgMenu);
     else if (stage == INTRO) {
       if (counter < introTimes.length && introTimes[counter]<=music.position()) {
-        background(loadImage("i"+int(counter+1)+"-01.jpg"));
+        if (music.position() < 28476)
+          background(loadImage("introCutscene"+int(counter+1)+".png"));
+        else
+          background(loadImage("i"+int(counter-23)+"-01.jpg"));
         counter++;
+        if (counter == introTimes.length-8)
+          pm.addP(300, height/2, music.position(), "ready", 1);
       }
-    } else if (stage == BOSSINTRO2 && music.position() < 19800) {
+    } else if (stage == BOSSINTRO2 && music.position() < 21000) {
       if (counter < bossTimes.length && bossTimes[counter]<=music.position()) {
         background(loadImage("spinner"+int(counter+1)+".png"));
+        counter++;
+      } else if (counter >= bossTimes.length) {
+        if (counter%6==0)
+          background(loadImage("spinner9.png"));
+        else if(counter%6 == 3)
+          background(loadImage("spinner8.png"));
         counter++;
       }
     } else if (stage == MAIN || stage >= BOSSINTRO2 ) {

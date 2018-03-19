@@ -40,9 +40,14 @@ class wordFall extends minigame
     counter++;
 
     text(currentWord, playerCar.x, playerCar.y);
-    for (fallingWord w : words) {
-      w.output(fontSize);
-      w.y+=4;
+    for (int i = words.size()-1; i >= 0; i--) {
+      words.get(i).output(fontSize);
+      words.get(i).y+=4;
+      if (words.get(i).y > height-fontSize) {
+        imgHandler.pm.addP(words.get(i).x, words.get(i).y, music.position(), "boom 2");
+        playerCar.damage(1);
+        words.remove(words.get(i));
+      }
     }
     if (status == POWERUP) {
       powerUpTimer++;
@@ -52,16 +57,18 @@ class wordFall extends minigame
       rect(width-50, 50, 45, powerUpTimer);
       fill(255);
     }
-  }
-
-  public int tryType(char letter, int code) {
-    if (powerUpTimer >=100) {
+    if (status == POWERUP && powerUpTimer >=100) {
       status = NOEFFECT;
       currentWord = "";
+      playerCar.streak = 0;
     }
+  }
+
+  public int tryType(char letter, int code, car playerCar) {
     if (status == POWERUP && words.size() > 1) {
       fallingWord w = words.get(words.size()-1);
       imgHandler.pm.addP(w.x, w.y, music.position(), "boom");
+      playerCar.setW(w);
       words.remove(w);
       currentWord = "";
       return CORRECT;
@@ -75,6 +82,8 @@ class wordFall extends minigame
       for (fallingWord w : words)
         if (w.check(currentWord) || letter == ';') {        
           imgHandler.pm.addP(w.x, w.y, music.position(), "nice");
+          playerCar.x = w.x;
+          playerCar.setW(w);
           if (w.special) {
             status = POWERUP;
             imgHandler.pm.addP(w.x, w.y, music.position(), "instantType", 2);
