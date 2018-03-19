@@ -1,37 +1,3 @@
-/*
-28630
- 30139
- 31555
- 33158
- 34783
- 36362
- 37941
- 39473
- //////////////
- 28676
- 30162
- 31625
- 33227
- - 34876
- 34876
- 35201
- 35619
- 35990
- - 36362
- 36710
- 37151
- 37523
- - 37871
- 38266
- 38684
- 39032
- - 39450
- 39775
- 40054
- 40333
- 40611
- 40820
- */
 public static final int WIN = -2;
 public static final int LOSE = -1;
 public static final int MENU = 0;
@@ -45,41 +11,37 @@ import ddf.minim.*;
 Minim minim;
 AudioPlayer music;
 AudioPlayer musicFX;
-ArrayList<minigame> minigames;
-int currentGame;
+imageHandler imgHandler;
+car blueCar;
+car redCar;
+minigame minigame;
 double time = 0;
 double words = 0;
 int stage;
 int fade;
-imageHandler imgHandler;
-car blueCar;
-car redCar;
 int direction;
-int introCounter;
+
 void setup() {
+  ///////////////////////setting up frame properties/////////////////
+  noStroke();
   surface.setResizable(true);
   surface.setSize(800, 450);
-  noStroke();
-  imgHandler = new imageHandler();
-  stage = 0;
-  currentGame = 0;
-  fade = 256;
-  minigames = new ArrayList<minigame>();
-  minigames.add(new typingTest2(50, 150, 32)); 
-
-  minim = new Minim(this);
-  music = minim.loadFile("title theme.mp3");
-  musicFX = minim.loadFile("buttonFX.wav");
-  // music.setVolume(100);
-  music.loop();
-  music.play();
-  direction = 1;
-
-  blueCar = new car(150, 100, false);
-  redCar = new car(450, 100, true);
-  redCar.setOpponent(blueCar);
-  blueCar.setOpponent(redCar);
-  introCounter = 0;
+  ///////////////////////setting up minigame properties/////////////////
+  imgHandler = new imageHandler();//create an image handler, used to manage particle effects such as explosions!
+  stage = 0; //stage variable, used to determine which point in the game the user is
+  fade = 256; //used to fade out of menu screen
+  direction = 1; //changes the direction the red car moves
+  minigame = new typingTest2(50, 150, 32);  //makes a minigame object, takes key inputs and outputs a result
+  blueCar = new car(150, 100, false); //blue car, controlled by the player
+  redCar = new car(450, 100, true); //enemy car
+  redCar.setOpponent(blueCar); //each car has an opponent variable, cant be used in constructors becaues one will not have been initialized yet
+  blueCar.setOpponent(redCar); //ditto
+  ///////////////////////setting up music player/////////////////
+  minim = new Minim(this);//uses a library called Minim to play music
+  music = minim.loadFile("title theme.mp3");//load title theme to be immediatley played
+  musicFX = minim.loadFile("buttonFX.wav");//second music object to play multiple things at once
+  music.loop(); //set music to loop
+  music.play(); 
 }
 
 
@@ -110,7 +72,7 @@ void draw() {
       stage = MAIN;
     }
     if (stage == MAIN || stage == BOSSMAIN2) {
-      minigames.get(currentGame).outputText(blueCar);
+      minigame.outputText(blueCar);
       if (blueCar.rand.nextInt(100) < 8) 
         direction = -1 * direction;
       if (stage == MAIN) {
@@ -157,7 +119,7 @@ void draw() {
       imgHandler.update(stage, redCar, blueCar);
       redCar.x = width/2-imgHandler.enemyCarImg.width/2;
       redCar.y = 0;
-      minigames.set(0, new wordFall(0, 0, 32));
+      minigame = new wordFall(0, 0, 32);
       redCar.setHealth(500, 500);
     }
     time += 1/3600.0;
@@ -181,18 +143,18 @@ void draw() {
 
 void keyPressed() {
   //pm.stopWriter();
-  if ( key == ENTER) {
+  if (stage == MENU && key == ENTER) {
     fade = 0;
     musicFX.play();
   } 
-  if (key == '1') { 
+  if (stage == MENU && key == '1') { 
     stage = MAIN;
     music.pause();
     music = minim.loadFile("NIGHT OF FIRE.mp3");
     music.cue(41334);
     music.play();
   }
-  if (key== '2') {
+  if (stage == MENU && key== '2') {
     stage = BOSSINTRO2;
     music.pause();
     music = minim.loadFile("GAS GAS GAAAS.wav");
@@ -200,7 +162,7 @@ void keyPressed() {
     music.play();
     imgHandler.counter = 0;
   } 
-  if (key== '3') {
+  if (stage == BOSSINTRO2 && key== '3') {
     stage = BOSSMAIN;
     music.pause();
     music = minim.loadFile("GAS GAS GAAAS.wav");
@@ -208,7 +170,7 @@ void keyPressed() {
     music.play();
     imgHandler.counter = 0;
   } else if (stage == MAIN || stage == BOSSMAIN2) {
-    int num = minigames.get(currentGame).tryType(key, keyCode, blueCar);
+    int num = minigame.tryType(key, keyCode, blueCar);
     if (num == CORRECT || num == POWERUP) {        //remove this distinction
       blueCar.correct();
       imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "one");
@@ -220,21 +182,8 @@ void keyPressed() {
       blueCar.incorrect();
       imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "minusOne");
     } 
-    if (minigames.get(0).next||keyCode == RIGHT)
-      minigames.set(0, new typingTest2(50, 150, 32));
+    if (minigame.next||keyCode == RIGHT)
+      minigame = new typingTest2(50, 150, 32);
     //println((words/5)/time);
-  }
-}
-void mousePressed() {
-  //System.out.println("("+mouseX+", "+mouseY+")"+mouseButton);
-  if (mouseButton == LEFT) {
-    introCounter++;
-    // System.out.println(music.position());
-    //imgHandler.pm.addP(mouseX, mouseY, music.position(), "star");
-
-    //System.out.println(" - "+music.position());
-    // imgHandler.pm.addP(mouseX, mouseY, music.position(), "oh");
-    // background(loadImage("introCutscene"+introCounter+".png"));
-    // System.out.println(music.position());
   }
 }
