@@ -6,7 +6,7 @@ class particleManager {
   }
   public void checkP() {
     for (int i = pList.size()-1; i >=0; i--) {
-      if (pList.get(i).show());
+      if (pList.get(i).show())
         pList.remove(i);
     }
   }
@@ -15,8 +15,12 @@ class particleManager {
     output.close(); 
     exit();
   }
-  public void addP(int x, int y, int num, String name) {
+  public void addP(int x, int y, int num, String name, int duration) {
+    pList.add(new particle(x,y,num, name, duration));
+  }
+    public void addP(int x, int y, int num, String name) {
     pList.add(new particle(x,y,num, name));
+    }
     //output.println("pList.add(new particle("+x+","+y+","+num+",\""+name+"\"));");
 /*
     pList.add(new particle(575, 148, 4351, "star"));
@@ -72,4 +76,3 @@ class particleManager {
     pList.add(new particle(442, 84, 25222, "oh"));
     pList.add(new particle(549, 95, 25619, "oh"));*/
   }
-}

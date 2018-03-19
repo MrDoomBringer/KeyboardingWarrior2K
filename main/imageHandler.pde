@@ -1,35 +1,9 @@
 class imageHandler {
   PImage bgimg, bgimg2, bgMenu, bgIntro, enemyCarImg, playerCarImg, fidget1, fidget2, fidget3;
   int bg, fade, counter, bossCounter;
-  int[] introTimes ={ 
-    28476, 
-    28576, 
-    28676, 
-    30162, //
-    31625, //
-    33227, //
-    34876, //
-    34876, 
-    35201, 
-    35619, 
-    35990, 
-    36362, //
-    36710, 
-    37151, 
-    37523, 
-    37871, //
-    38266, 
-    38684, 
-    39032, 
-    39450, //
-    39475, 
-    40054, 
-    40333, 
-    40611, 
-    40820, 
-  };
+  int[] introTimes ={ 28476, 28576, 28676, 30162, 31625, 33227, 34876, 34876, 35201, 35619, 35990, 36362, 36710, 37151, 37523, 37871, 38266, 38684, 39032, 39450, 39475, 40054, 40333, 40611, 40820, };
   int[] bossTimes={580, 3600, 6700, 9800, 11400, 13000, 15000, 16600, 18200, 19800};
-  int[] bossCharge={23846, 24148, 24520, 24891};
+  int[] bossCharge={18200, 23846, 24148, 24520, 24891};
 
   public particleManager pm;
   public imageHandler() {
@@ -60,7 +34,6 @@ class imageHandler {
         background(loadImage("i"+int(counter+1)+"-01.jpg"));
         counter++;
       }
-      
     } else if (stage == BOSSINTRO2 && music.position() < 19800) {
       if (counter < bossTimes.length && bossTimes[counter]<=music.position()) {
         background(loadImage("spinner"+int(counter+1)+".png"));
@@ -74,10 +47,9 @@ class imageHandler {
         background(bgimg2);
         bg = 1;
       }
-      if (stage == BOSSMAIN && music.position() < 25400) {
-        enemyCar.x = 0;
+      if (stage == BOSSMAIN && music.position() < 25300) {
         if (bossCounter < bossCharge.length && bossCharge[bossCounter]<=music.position()) {
-          enemyCarImg = loadImage("charge"+int(bossCounter+1)+".png");
+          enemyCarImg = loadImage("charge"+int(bossCounter)+".png");
           bossCounter++;
         }
       } else if (stage == BOSSMAIN2) {

@@ -72,8 +72,10 @@ void setup() {
   music.play();
   direction = 1;
 
-  blueCar = new car(150, 100, false, redCar);
-  redCar = new car(450, 100, true, blueCar);
+  blueCar = new car(150, 100, false);
+  redCar = new car(450, 100, true);
+  redCar.setOpponent(blueCar);
+  blueCar.setOpponent(redCar);
 }
 
 
@@ -102,16 +104,24 @@ void draw() {
   if (stage == INTRO && music.position() > 41334) {
     stage = MAIN;
   }
-  if (stage == INTRO || stage == MAIN || stage == BOSSMAIN2)
-    imgHandler.pm.checkP(); 
-  if (stage == MAIN) {
+  //if (stage == INTRO || stage == MAIN || stage == BOSSMAIN2)
+  //imgHandler.pm.checkP(); 
+  if (stage == MAIN || stage == BOSSMAIN2) {
     minigames.get(currentGame).outputText(blueCar);
     if (blueCar.rand.nextInt(100) < 8) 
       direction = -1 * direction;
-    redCar.y-=direction;
+    if (stage == MAIN) {
+      redCar.y-=direction;
+      blueCar.y+=1;
+    } else if (stage == BOSSMAIN2) {
+      blueCar.x+=direction*10;
+    }
     blueCar.output();
     redCar.output();
-    blueCar.y+=1;
+    if (blueCar.x <= 5)
+      blueCar.x = 15;
+    if (blueCar.x >= width-imgHandler.playerCarImg.width)
+      blueCar.x = width-imgHandler.playerCarImg.width;
   }
   if (stage == MAIN && redCar.health <= 0) {
     fade = 0;
@@ -125,23 +135,24 @@ void draw() {
 
   else if (stage == BOSSINTRO2 && music.position() > 18300) {
     stage = BOSSMAIN;
+    imgHandler.update(stage, redCar, blueCar);
     surface.setSize(450, 800);
-    redCar.x = width/2;
-    redCar.y = 0;
+    redCar.x = -50;//width/2-imgHandler.enemyCarImg.width/2;
+    redCar.y = -100;
     blueCar.x = width/2;
     blueCar.y = height-200;
+    imgHandler.playerCarImg.resize(100, 0);
     imgHandler.bgimg = loadImage("longRoad1.png");
     imgHandler.bgimg2 = loadImage("longRoad2.png");
   }
 
   if (stage == BOSSMAIN && music.position() >= 25400) {
     stage = BOSSMAIN2;
+    imgHandler.update(stage, redCar, blueCar);
+    redCar.x = width/2-imgHandler.enemyCarImg.width/2;
+    redCar.y = 0;
     minigames.set(0, new wordFall(0, 0, 32));
-  }
-
-  if (stage == BOSSMAIN2){
-    minigames.get(currentGame).outputText(blueCar);
-    println("habbening");
+    redCar.setHealth(500, 500);
   }
   time += 1/3600.0;
 }
@@ -166,9 +177,17 @@ void keyPressed() {
     music.cue(18400);
     music.play();
     imgHandler.counter = 0;
+  } 
+  if (key== '3') {
+    stage = BOSSMAIN;
+    music.pause();
+    music = minim.loadFile("GAS GAS GAAAS.wav");
+    music.cue(25400);
+    music.play();
+    imgHandler.counter = 0;
   } else if (stage == MAIN || stage == BOSSMAIN2) {
     int num = minigames.get(currentGame).tryType(key, keyCode);
-    if (num == CORRECT) {
+    if (num == CORRECT || num == POWERUP) {        //remove this distinction
       blueCar.correct();
       imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "one");
       if (blueCar.correct%5==0 && blueCar.streak>0) {
