@@ -1,3 +1,5 @@
+////////////////////////////////////////////////////////////////////////////////////MADE BY ////////////////////////////////////////////////////////////////////////////
+
 class fallingWord extends movable {
   String word;
   boolean special;
@@ -6,14 +8,11 @@ class fallingWord extends movable {
     this.word = word;
     this.special = special;
   }
-  public boolean check(String word) {
-    return this.word.equals(word);
-  }
   public void output(int fontSize) {
     if (special) {
       fill(255, 255, 0);
       textSize(fontSize*2);
-      text(word, x, y);
+      text(word, x, y);//if special, print out big and yellow
       fill(255);
       textSize(fontSize);
     } else

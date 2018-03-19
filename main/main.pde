@@ -1,12 +1,14 @@
-public static final int WIN = -2;
-public static final int LOSE = -1;
-public static final int MENU = 0;
-public static final int INTRO = 1;
-public static final int MAIN = 2;
-public static final int BOSSINTRO1 = 3;
-public static final int BOSSINTRO2 = 4;
-public static final int BOSSMAIN = 5;
-public static final int BOSSMAIN2 = 6;
+////////////////////////////////////////////////////////////////////////////////////MADE BY ////////////////////////////////////////////////////////////////////////////
+
+public static final int WIN = -2;//if you win the game
+public static final int LOSE = -1;//if you lose the game
+public static final int MENU = 0;//menu screen
+public static final int INTRO = 1;//first cutscene
+public static final int MAIN = 2;//first battle
+public static final int BOSSINTRO1 = 3;//first few seconds of boss cutscene, still shows gameplay so we made a seperate stage for it
+public static final int BOSSINTRO2 = 4;//rest of boss cutscene, this one is shows just backgrounds
+public static final int BOSSMAIN = 5;//beginning of bossFight. During the first few seconds, the player cant move to allow a neat animation to play, and as such this was created
+public static final int BOSSMAIN2 = 6;//second battle
 import ddf.minim.*;
 Minim minim;
 AudioPlayer music;
@@ -15,8 +17,6 @@ imageHandler imgHandler;
 car blueCar;
 car redCar;
 minigame minigame;
-double time = 0;
-double words = 0;
 int stage;
 int fade;
 int direction;
@@ -31,7 +31,7 @@ void setup() {
   stage = 0; //stage variable, used to determine which point in the game the user is
   fade = 256; //used to fade out of menu screen
   direction = 1; //changes the direction the red car moves
-  minigame = new typingTest2(50, 150, 32);  //makes a minigame object, takes key inputs and outputs a result
+  minigame = new typingTest(50, 150, 32);  //makes a minigame object, takes key inputs and outputs a result
   blueCar = new car(150, 100, false); //blue car, controlled by the player
   redCar = new car(450, 100, true); //enemy car
   redCar.setOpponent(blueCar); //each car has an opponent variable, cant be used in constructors becaues one will not have been initialized yet
@@ -41,88 +41,89 @@ void setup() {
   music = minim.loadFile("title theme.mp3");//load title theme to be immediatley played
   musicFX = minim.loadFile("buttonFX.wav");//second music object to play multiple things at once
   music.loop(); //set music to loop
-  music.play(); 
+  music.play();
 }
 
 
 void draw() { 
-  if (stage == WIN || stage == LOSE) {
+  ///////////////////////stage handling/////////////////
+  //cutscenes are made by setting backgrounds as per the music's position and the current stage
+
+  if (stage == WIN || stage == LOSE) {//if the game is over, then you should only display a background and nothing else. Having this conditional first ensures this
     background(loadImage("endgame"+stage+".png"));
   } else {
-    imgHandler.update(stage, redCar, blueCar);
-    if (fade < 255) {
-      fade+=2;
-      music.setGain(music.getGain()-1);
+    imgHandler.update(stage, redCar, blueCar);//imgHandler.update() calls a variety of things, primarily setting background based on stage and music position, as well as adding particle effects 
+    if (fade < 255) {//used for fading out of scenes. While the fade is transpatent (value<255), we...
+      fade+=2;//increase fade
+      music.setGain(music.getGain()-1);//and lower the current music's volume
       if (fade >=255) {
-        if (stage == MENU) {
+        if (stage == MENU) {//once the fade variable is >255 (opaque), we change the stage and play a new song
           stage = INTRO;
           music = minim.loadFile("NIGHT OF FIRE.mp3");
         } else if (stage == BOSSINTRO1) {
           music = minim.loadFile("GAS GAS GAAAS.wav");
-          imgHandler.counter = 0;
+          imgHandler.counter = 0;//imgHandler.counter is a variable used for outputting cutscenes (explained further in imageHandler.pde), so we need to reset it to zero for new cutscenes
         }
-
-        music.loop();
+        music.loop();//after setting new music, set it to loop and play it
         music.play();
       }
-      fill(0, fade);
+      fill(0, fade);//fill a screen-sized rectangle with the fade variable to create a transition
       rect(0, 0, width, height);
     }
     if (stage == INTRO && music.position() > 41334) {
-      stage = MAIN;
+      stage = MAIN;//if intro cutscene, and the music has reached a certain point, switch stages
     }
-    if (stage == MAIN || stage == BOSSMAIN2) {
+    if (stage == MAIN || stage == BOSSMAIN2) {//these are the two stages where the user is battling an enemy
       minigame.outputText(blueCar);
       if (blueCar.rand.nextInt(100) < 8) 
-        direction = -1 * direction;
-      if (stage == MAIN) {
-        redCar.y-=direction;
-        blueCar.y+=1;
-        if (blueCar.y > height-10) {
+        direction = -1 * direction;//direction has a 8/100 % chance to change
+      if (stage == MAIN) {//during the frist battle, 
+        redCar.y-=direction;//the red car moves randomly
+        blueCar.y+=1;// and the player car moves downward
+        if (blueCar.y > height-10) {//if the bluecar gets too low during the first battle, deal damage to it then push it back forward
           blueCar.damage(20);
           blueCar.y-=180;
         }
       } 
-      blueCar.output();
-      redCar.output();
-      if (blueCar.x <= 5)
+      blueCar.output();//used to dislpay the car's health and stats (correct words and incorrect words)
+      redCar.output();//enemy cars have an NPC variable which, if true, will make them not display stats but still display health
+      if (blueCar.x <= 5)//bounds. if the player car's x variable gets too big or too small, we push it back 
         blueCar.x = 15;
       if (blueCar.x >= width-imgHandler.playerCarImg.width)
         blueCar.x = width-imgHandler.playerCarImg.width;
     }
-    if (stage == MAIN && redCar.health <= 0) {
-      fade = 0;
-      stage = BOSSINTRO1;
+    if (stage == MAIN && redCar.health <= 0) {//if you get the red car's health down to zero in the first battle, then
+      fade = 0;//set fade to zero, which will make the second conditional in draw() be called and start fading out
+      stage = BOSSINTRO1;//set stage to bossintro1
     }
 
-    if (stage == BOSSINTRO1 && fade >=255)
-      stage = BOSSINTRO2;
+    if (stage == BOSSINTRO1 && fade >=255)//once the screen has faded to black,
+      stage = BOSSINTRO2;//go to the next stage (second cutscene)
 
 
 
-    else if (stage == BOSSINTRO2 && music.position() > 18300) {
-      stage = BOSSMAIN;
-      imgHandler.update(stage, redCar, blueCar);
-      surface.setSize(450, 800);
-      imgHandler.pm.addP(300, height/2, music.position(), "ready", 1);
-      redCar.x = -50;//width/2-imgHandler.enemyCarImg.width/2;
+    else if (stage == BOSSINTRO2 && music.position() > 18300) {//bossIntro cutscene plays until the music reaches a certain point, at which point we...
+      stage = BOSSMAIN;//move onto next stage
+      imgHandler.update(stage, redCar, blueCar);//update imgHandler to account for new stage
+      surface.setSize(450, 800);//change the frame's size to more verticle
+      imgHandler.pm.addP(300, height/2, music.position(), "ready", 1);//add a ready particle effect(more details in imageHandler.pde and particleManager.pde)
+      redCar.x = -50;//set enemy to near middle top of screen
       redCar.y = -100;
-      blueCar.x = width/2;
+      blueCar.x = width/2;//set player car to bottom middle of screen
       blueCar.y = height-200;
-      imgHandler.playerCarImg.resize(100, 0);
-      imgHandler.bgimg = loadImage("longRoad1.png");
+      imgHandler.playerCarImg.resize(100, 0);//make player call smaller
+      imgHandler.bgimg = loadImage("longRoad1.png");//changes the texture of the road
       imgHandler.bgimg2 = loadImage("longRoad2.png");
     }
 
-    if (stage == BOSSMAIN && music.position() >= 25400) {
-      stage = BOSSMAIN2;
-      imgHandler.update(stage, redCar, blueCar);
-      redCar.x = width/2-imgHandler.enemyCarImg.width/2;
-      redCar.y = 0;
-      minigame = new wordFall(0, 0, 32);
-      redCar.setHealth(500, 500);
+    if (stage == BOSSMAIN && music.position() >= 25400) {//once BOSS cutscene done (according to music position) move on to the actual fight
+      stage = BOSSMAIN2;//change stage
+      imgHandler.update(stage, redCar, blueCar);//update iamge
+      redCar.x = width/2-imgHandler.enemyCarImg.width/2;//move enemy to center of screen
+      redCar.y = 0;//top of screen
+      minigame = new wordFall(0, 0, 32);//make a new minigame, the wordFall system
+      redCar.setHealth(500, 500);//set boss's health (and initialHealth) to 500
     }
-    time += 1/3600.0;
     if (blueCar.health <=0) {
       stage = LOSE;
       music.pause();
@@ -142,7 +143,6 @@ void draw() {
 }
 
 void keyPressed() {
-  //pm.stopWriter();
   if (stage == MENU && key == ENTER) {
     fade = 0;
     musicFX.play();
@@ -183,7 +183,6 @@ void keyPressed() {
       imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "minusOne");
     } 
     if (minigame.next||keyCode == RIGHT)
-      minigame = new typingTest2(50, 150, 32);
-    //println((words/5)/time);
+      minigame = new typingTest(50, 150, 32);
   }
 }
