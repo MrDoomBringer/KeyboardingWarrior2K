@@ -124,14 +124,14 @@ void draw() {
       minigame = new wordFall(0, 0, 32);//make a new minigame, the wordFall system
       redCar.setHealth(500, 500);//set boss's health (and initialHealth) to 500
     }
-    if (blueCar.health <=0) {
+    if (blueCar.health <=0) {//when you lose, switch stage, play a sad song and change surface to fit the image it will show
       stage = LOSE;
       music.pause();
       music = minim.loadFile("sadSong.mp3");
       music.play();
       delay(6000);
       surface.setSize(450, 450);
-    } else if (stage == BOSSMAIN2 && redCar.health <=0) {
+    } else if (stage == BOSSMAIN2 && redCar.health <=0) {//similear to above
       stage = WIN;
       music.pause();
       music = minim.loadFile("victory.mp3");
@@ -143,18 +143,18 @@ void draw() {
 }
 
 void keyPressed() {
-  if (stage == MENU && key == ENTER) {
+  if (stage == MENU && key == ENTER) {//hitting ENTER at the menu
     fade = 0;
     musicFX.play();
   } 
-  if (stage == MENU && key == '1') { 
+  if (stage == MENU && key == '1') { //debug, goes to first battle
     stage = MAIN;
     music.pause();
     music = minim.loadFile("NIGHT OF FIRE.mp3");
     music.cue(41334);
     music.play();
   }
-  if (stage == MENU && key== '2') {
+  if (stage == MENU && key== '2') {//debug, goes to second cutscene
     stage = BOSSINTRO2;
     music.pause();
     music = minim.loadFile("GAS GAS GAAAS.wav");
@@ -162,27 +162,27 @@ void keyPressed() {
     music.play();
     imgHandler.counter = 0;
   } 
-  if (stage == BOSSINTRO2 && key== '3') {
+  if (stage == BOSSINTRO2 && key== '3') {//debug, goes to second battle
     stage = BOSSMAIN;
     music.pause();
     music = minim.loadFile("GAS GAS GAAAS.wav");
     music.cue(25400);
     music.play();
     imgHandler.counter = 0;
-  } else if (stage == MAIN || stage == BOSSMAIN2) {
-    int num = minigame.tryType(key, keyCode, blueCar);
-    if (num == CORRECT || num == POWERUP) {        //remove this distinction
+  } else if (stage == MAIN || stage == BOSSMAIN2) {//if battling,
+    int num = minigame.tryType(key, keyCode, blueCar);//set a variable to the output of tryType(), variable will return either powerup, correct, incorrect, or noeffect
+    if (num == CORRECT || num == POWERUP) {
       blueCar.correct();
-      imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "one");
+      imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "one");//if correct, at a "+1" particle
       if (blueCar.correct%5==0 && blueCar.streak>0) {
         redCar.damage(blueCar.streak);
-        imgHandler.pm.addP(redCar.x+120, redCar.y+120, music.position(), "boom 2");
+        imgHandler.pm.addP(redCar.x+120, redCar.y+120, music.position(), "boom 2");//every 5 correct words, deal damage to the redcar based on the number of correct words youve gotten in a row, then display an explosion particle on the enemy car
       }
     } else if (num == INCORRECT) {
       blueCar.incorrect();
-      imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "minusOne");
+      imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "minusOne");//similar to above
     } 
-    if (minigame.next||keyCode == RIGHT)
-      minigame = new typingTest(50, 150, 32);
+    if (stage == MAIN && (minigame.next||keyCode == RIGHT))//debug, right arrow gives you a new sentence to type
+      minigame = new typingTest(50, 150, 32);//if all words are exhausted, make a new typing test
   }
 }
