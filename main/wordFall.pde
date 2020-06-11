@@ -1,5 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////////MADE BY ////////////////////////////////////////////////////////////////////////////
-
 public static final int POWERUP = 3;//used to tell when the user is "powered up"
 
 class wordFall extends minigame
@@ -24,7 +22,7 @@ class wordFall extends minigame
     currentWord = "";//current typed word
     words.add(new fallingWord(rand.nextInt(width-20)+20, 0, "dab", false));
     oldTime = 0;
-    wordChoices = loadStrings("1000.txt");//there are 1000 word choices in an array read line by line from a text file
+    wordChoices = loadStrings("assets/words/1000.txt");//there are 1000 word choices in an array read line by line from a text file
     index = 0;
     counter = 0;
     powerUpTimer = 0;

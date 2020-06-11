@@ -1,5 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////////MADE BY ME////////////////////////////////////////////////////////////////////////////
-
 public static final int WIN = -2;//if you win the game
 public static final int LOSE = -1;//if you lose the game
 public static final int MENU = 0;//menu screen
@@ -38,8 +36,8 @@ void setup() {
   blueCar.setOpponent(redCar); //ditto
   ///////////////////////setting up music player/////////////////
   minim = new Minim(this);//uses a library called Minim to play music
-  music = minim.loadFile("title theme.mp3");//load title theme to be immediatley played
-  musicFX = minim.loadFile("buttonFX.wav");//second music object to play multiple things at once
+  music = minim.loadFile("assets/audio/title theme.mp3");//load title theme to be immediatley played
+  musicFX = minim.loadFile("assets/audio/buttonFX.wav");//second music object to play multiple things at once
   music.loop(); //set music to loop
   music.play();
 }
@@ -50,7 +48,7 @@ void draw() {
   //cutscenes are made by setting backgrounds as per the music's position and the current stage
 
   if (stage == WIN || stage == LOSE) {//if the game is over, then you should only display a background and nothing else. Having this conditional first ensures this
-    background(loadImage("endgame"+stage+".png"));
+    background(loadImage("assets/images/endgame"+stage+".png"));
   } else {
     imgHandler.update(stage, redCar, blueCar);//imgHandler.update() calls a variety of things, primarily setting background based on stage and music position, as well as adding particle effects 
     if (fade < 255) {//used for fading out of scenes. While the fade is transpatent (value<255), we...
@@ -59,9 +57,9 @@ void draw() {
       if (fade >=255) {
         if (stage == MENU) {//once the fade variable is >255 (opaque), we change the stage and play a new song
           stage = INTRO;
-          music = minim.loadFile("NIGHT OF FIRE.mp3");
+          music = minim.loadFile("assets/audio/NIGHT OF FIRE.mp3");
         } else if (stage == BOSSINTRO1) {
-          music = minim.loadFile("GAS GAS GAAAS.wav");
+          music = minim.loadFile("assets/audio/GAS GAS GAAAS.wav");
           imgHandler.counter = 0;//imgHandler.counter is a variable used for outputting cutscenes (explained further in imageHandler.pde), so we need to reset it to zero for new cutscenes
         }
         music.loop();//after setting new music, set it to loop and play it
@@ -112,8 +110,8 @@ void draw() {
       blueCar.x = width/2;//set player car to bottom middle of screen
       blueCar.y = height-200;
       imgHandler.playerCarImg.resize(100, 0);//make player call smaller
-      imgHandler.bgimg = loadImage("longRoad1.png");//changes the texture of the road
-      imgHandler.bgimg2 = loadImage("longRoad2.png");
+      imgHandler.bgimg = loadImage("assets/images/longRoad1.png");//changes the texture of the road
+      imgHandler.bgimg2 = loadImage("assets/images/longRoad2.png");
     }
 
     if (stage == BOSSMAIN && music.position() >= 25400) {//once BOSS cutscene done (according to music position) move on to the actual fight
@@ -127,14 +125,14 @@ void draw() {
     if (blueCar.health <=0) {//when you lose, switch stage, play a sad song and change surface to fit the image it will show
       stage = LOSE;
       music.pause();
-      music = minim.loadFile("sadSong.mp3");
+      music = minim.loadFile("assets/audio/sadSong.mp3");
       music.play();
       delay(6000);
       surface.setSize(450, 450);
     } else if (stage == BOSSMAIN2 && redCar.health <=0) {//similear to above
       stage = WIN;
       music.pause();
-      music = minim.loadFile("victory.mp3");
+      music = minim.loadFile("assets/audio/victory.mp3");
       music.play();
       delay(6000);
       surface.setSize(450, 450);
@@ -150,14 +148,14 @@ void keyPressed() {
   if (stage == MENU && key == '1') { //debug, goes to first battle
     stage = MAIN;
     music.pause();
-    music = minim.loadFile("NIGHT OF FIRE.mp3");
+    music = minim.loadFile("assets/audio/NIGHT OF FIRE.mp3");
     music.cue(41334);
     music.play();
   }
   if (stage == MENU && key== '2') {//debug, goes to second cutscene
     stage = BOSSINTRO2;
     music.pause();
-    music = minim.loadFile("GAS GAS GAAAS.wav");
+    music = minim.loadFile("assets/audio/GAS GAS GAAAS.wav");
     music.cue(18400);
     music.play();
     imgHandler.counter = 0;
@@ -165,7 +163,7 @@ void keyPressed() {
   if (stage == BOSSINTRO2 && key== '3') {//debug, goes to second battle
     stage = BOSSMAIN;
     music.pause();
-    music = minim.loadFile("GAS GAS GAAAS.wav");
+    music = minim.loadFile("assets/audio/GAS GAS GAAAS.wav");
     music.cue(25400);
     music.play();
     imgHandler.counter = 0;

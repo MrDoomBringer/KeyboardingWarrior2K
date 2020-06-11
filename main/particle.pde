@@ -1,5 +1,3 @@
-////////////////////////////////////////////////////////////////////////////////////MADE BY PARTNER////////////////////////////////////////////////////////////////////////////
-
 class particle extends movable {
   PImage img;//what the image of the particle is
   int time;//what time the particle should appear
@@ -8,7 +6,7 @@ class particle extends movable {
   int duration;//how long the particle will exist
   public particle(int x, int y, int time, String name, int duration) {
     super(x, y);//extends movable, so call super() with x and y variables
-    img = loadImage(name+".png");//load the image based on name
+    img = loadImage("assets/images/"+name+".png");//load the image based on name
     this.time = time;//time for the particle to appear
     counter = 0;
     tinter = 255;//start opaque
@@ -18,7 +16,7 @@ class particle extends movable {
   }
   public particle(int x, int y, int time, String name) {//same as above, just with a default duration = 15
     super(x, y);
-    img = loadImage(name+".png");
+    img = loadImage("assets/images/"+name+".png");
     this.time = time;
     counter = 0;
     tinter = 255;
