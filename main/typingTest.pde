@@ -24,7 +24,10 @@ class typingTest extends minigame {
         currentWord = currentWord.substring(0, currentWord.length()-1);  
       return NOEFFECT;
     } else if (letter == ' ' || letter == ';') {
-      int status = currentWord.equals(words[index])||letter==';' ? CORRECT : INCORRECT;//useful trick we found to shorten an if statement. makes status = correct if the word in the array equals the typed word (or if semicolon is pressed for debug purposes)
+      String correctWord = words[index];
+      String attemptWord = currentWord;
+      playerCar.recordFeedback(correctWord, attemptWord);
+      int status = currentWord.equals(correctWord)||letter==';' ? CORRECT : INCORRECT;//useful trick we found to shorten an if statement. makes status = correct if the word in the array equals the typed word (or if semicolon is pressed for debug purposes)
       correctList[index] = status;//-1 for incorrect, 0 for no effect, and 1 for correct. defined at top of file
       currentWord = "";
       index ++;

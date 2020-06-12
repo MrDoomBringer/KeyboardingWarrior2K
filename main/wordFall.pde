@@ -77,6 +77,7 @@ class wordFall extends minigame
         currentWord = currentWord.substring(0, currentWord.length()-1);  
       return NOEFFECT;
     } else if (letter == ' ' || letter == ';') {//consider a word to be finished once the space key is pressed (semicolon for debug)
+      
       for (fallingWord w : words)
         if (w.word.equals(currentWord) || letter == ';') { //go through each word and check if it equals the typed word
           imgHandler.pm.addP(w.x, w.y, music.position(), "nice");//create a "nice" image on the right word after you type it
@@ -92,6 +93,7 @@ class wordFall extends minigame
           return status;
         }
       imgHandler.pm.addP(blueCar.x, blueCar.y, music.position(), "wrong");//if the user hits "space" but the typed word doesnt equal any word displayed, then they are incorrect
+      playerCar.recordFeedback(currentWord);
       currentWord = "";
       return INCORRECT;
     }

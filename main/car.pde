@@ -1,3 +1,5 @@
+import java.util.HashMap;
+
 class car extends movable {
   int correct;
   int incorrect;
@@ -10,6 +12,8 @@ class car extends movable {
   int words;
   double time;
   fallingWord word;
+  HashMap<Character, Integer> missedLetters;
+  ArrayList<String> missedWords;
   public car(int x, int y, boolean npc) {
     super(x, y);  
     correct = 0;//num of correct words
@@ -21,6 +25,8 @@ class car extends movable {
     laser = 0;//used to time lasers appearence
     time = 0.0;//used for WPM
     words = 0;//used for WPM
+    missedLetters = new HashMap<Character, Integer>();
+    missedWords = new ArrayList<String>();
   }
   public void setOpponent(car opponent) {
     this.opponent = opponent;
@@ -73,5 +79,18 @@ class car extends movable {
   public void incorrect() {
     streak = 0;
     incorrect++;
+  }
+  public void recordFeedback(String correctword, String attemptword){
+    for (int i = 0; i < correctword.length() && i < attemptword.length(); i++){
+      if (correctword.charAt(i) != attemptword.charAt(i)){
+        char ch = correctword.charAt(i);
+        int frequency;
+        Integer count = missedLetters.get(ch) == null ? 0 : missedLetters.get(ch);
+        missedLetters.put(ch, count + 1);
+      }
+    }
+  }
+  public void recordFeedback(String attemptword){
+    missedWords.add(attemptword);
   }
 }

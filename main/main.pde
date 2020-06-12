@@ -18,7 +18,7 @@ minigame minigame;
 int stage;
 int fade;
 int direction;
-
+boolean shownFeedback = false;
 void setup() {
   ///////////////////////setting up frame properties/////////////////
   noStroke();
@@ -49,6 +49,34 @@ void draw() {
 
   if (stage == WIN || stage == LOSE) {//if the game is over, then you should only display a background and nothing else. Having this conditional first ensures this
     background(loadImage("assets/images/endgame"+stage+".png"));
+    if (!shownFeedback){
+      shownFeedback = true;
+      
+      int maxvalue = 0;
+      char maxkey = 0;
+      for (Map.Entry entry : blueCar.missedLetters.entrySet()) { 
+            char key = (char)entry.getKey(); 
+            int value = (int)entry.getValue(); 
+            if (value > maxvalue){
+              maxvalue = value;
+              maxkey = key;
+            }
+        }
+      if (maxkey == 0)
+        javax.swing.JOptionPane.showMessageDialog(null, "You misstyped nothing in the first stage! Great job!!");
+      else
+        javax.swing.JOptionPane.showMessageDialog(null, "Your most often misstyped letter was" + maxkey + " and you misstyped it " + maxvalue + " time(s)!");
+      if (blueCar.missedWords.size() == 0)
+        javax.swing.JOptionPane.showMessageDialog(null, "You missed nothing on the second stage! That's nearly impossible, great job!!");
+      else{
+        String output = "In terms of your incorrectly spelled words in the second stage, here's the list: | ";
+        for (String word : blueCar.missedWords){
+          output += word + " | ";
+        }
+        javax.swing.JOptionPane.showMessageDialog(null, output);
+      }
+    }
+    
   } else {
     imgHandler.update(stage, redCar, blueCar);//imgHandler.update() calls a variety of things, primarily setting background based on stage and music position, as well as adding particle effects 
     if (fade < 255) {//used for fading out of scenes. While the fade is transpatent (value<255), we...
