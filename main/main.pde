@@ -65,13 +65,19 @@ void draw() {
       if (maxkey == 0)
         javax.swing.JOptionPane.showMessageDialog(null, "You misstyped nothing in the first stage! Great job!!");
       else
-        javax.swing.JOptionPane.showMessageDialog(null, "Your most often misstyped letter was" + maxkey + " and you misstyped it " + maxvalue + " time(s)!");
+        javax.swing.JOptionPane.showMessageDialog(null, "Your most often misstyped letter was " + maxkey + " and you misstyped it " + maxvalue + " time(s)!");
       if (blueCar.missedWords.size() == 0)
         javax.swing.JOptionPane.showMessageDialog(null, "You missed nothing on the second stage! That's nearly impossible, great job!!");
       else{
-        String output = "In terms of your incorrectly spelled words in the second stage, here's the list: | ";
+        String output = "In terms of your incorrectly spelled words in the second stage, here's the list:";
+        int counter = 0;
         for (String word : blueCar.missedWords){
-          output += word + " | ";
+          if (word.equals(" ") || word.equals(""))
+            continue;
+          counter ++;
+          if (counter % 5 == 0)
+            output += "\n";
+          output += word + ", ";
         }
         javax.swing.JOptionPane.showMessageDialog(null, output);
       }
